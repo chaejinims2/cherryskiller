@@ -1,3 +1,6 @@
 [submodule "common/third-party/googletest"]
 	path = common/third-party/googletest
 	url = https://github.com/google/googletest
+[submodule "common/third-party/bats-core"]
+	path = common/third-party/bats-core
+	url = https://github.com/bats-core/bats-core
