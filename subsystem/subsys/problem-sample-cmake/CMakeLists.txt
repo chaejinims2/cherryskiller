@@ -1,20 +1,22 @@
-cmake_minimum_required(VERSION 3.8)
-project(cpp_calc)
+cmake_minimum_required(VERSION 3.16)
+project(problem-sample-cmake LANGUAGES CXX)
 
-aux_source_directory(src SOURCE_FILES)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+aux_source_directory(src  SOURCE_FILES)
 aux_source_directory(test TEST_SOURCE_FILES)
 
-find_package (Threads)
+find_package(Threads REQUIRED)
 
-enable_testing()
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
+get_filename_component(REPO_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../../" ABSOLUTE)
+add_subdirectory("${REPO_ROOT}/common/third-party/googletest" "${CMAKE_BINARY_DIR}/_deps/googletest-build")
 
 add_executable(testing ${SOURCE_FILES} ${TEST_SOURCE_FILES})
-target_compile_features(testing PUBLIC cxx_std_20)
-set_target_properties(testing PROPERTIES CXX_EXTENSIONS OFF)
-target_link_libraries(testing ${GTEST_BOTH_LIBRARIES})
-target_link_libraries(testing Threads::Threads)
+target_include_directories(testing PRIVATE src test)
 
+target_link_libraries(testing PRIVATE gtest gtest_main gmock Threads::Threads)
 
-add_test(AllTests testing)
+enable_testing()
+add_test(NAME AllTests COMMAND testing)
